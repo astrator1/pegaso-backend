@@ -19,14 +19,18 @@ export interface EntityConfig {
 }
 
 export const ENTITIES: Record<string, EntityConfig> = {
-  Aeronave: { name: "Aeronave", readRule: "owner_or_admin" },
-  Bateria: { name: "Bateria", readRule: "owner" },
+  // Listados básicos que un piloto necesita ver para poder rellenar el formulario de vuelo
+  // (elegir aeronave, batería, piloto). Cualquier usuario autenticado y aprobado los puede leer.
+  Aeronave: { name: "Aeronave", readRule: "any" },
+  Bateria: { name: "Bateria", readRule: "any" },
+  Piloto: { name: "Piloto", readRule: "any" },
+  // Un piloto solo ve sus propios registros de vuelo, no los de otros
+  Vuelo: { name: "Vuelo", readRule: "owner" },
+  // El resto de la gestión de flota queda fuera del alcance de un piloto normal
   BateriaMantenimiento: { name: "BateriaMantenimiento", readRule: "owner" },
   Mantenimiento: { name: "Mantenimiento", readRule: "owner" },
   Material: { name: "Material", readRule: "owner" },
   Modificaciones: { name: "Modificaciones", readRule: "owner" },
-  Piloto: { name: "Piloto", readRule: "owner" },
-  Vuelo: { name: "Vuelo", readRule: "owner" },
 };
 
 export function isValidEntity(name: string): boolean {
