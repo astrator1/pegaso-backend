@@ -1,5 +1,6 @@
 import { handleRegister, handleLogin, handleMe, handleForgotPassword, handleResetPassword } from "./src/handlers/auth.ts";
 import { handleEntities } from "./src/handlers/entities.ts";
+import { handleListAllUsers, handleApproveUser, handleDeleteUser } from "./src/handlers/admin.ts";
 
 function corsHeaders() {
   const origin = Deno.env.get("APP_URL") || "*";
@@ -34,6 +35,12 @@ async function router(req: Request): Promise<Response> {
   if (path === "/api/auth/me" && req.method === "GET") return handleMe(req);
   if (path === "/api/auth/forgot-password" && req.method === "POST") return handleForgotPassword(req);
   if (path === "/api/auth/reset-password" && req.method === "POST") return handleResetPassword(req);
+
+  if (path === "/api/admin/users" && req.method === "GET") return handleListAllUsers(req);
+  const approveMatch = path.match(/^\/api\/admin\/users\/([^/]+)\/approve$/);
+  if (approveMatch && req.method === "POST") return handleApproveUser(req, approveMatch[1]);
+  const userIdMatch = path.match(/^\/api\/admin\/users\/([^/]+)$/);
+  if (userIdMatch && req.method === "DELETE") return handleDeleteUser(req, userIdMatch[1]);
 
   const entityMatch = path.match(/^\/api\/entities\/([^/]+)(?:\/(.*))?$/);
   if (entityMatch) {
