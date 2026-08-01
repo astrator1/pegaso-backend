@@ -8,7 +8,7 @@ definidas en Base44 (`src/entities.ts`).
 ## 1. Crear la base de datos en MongoDB Atlas (gratis) 
 
 1. Ve a https://www.mongodb.com/cloud/atlas/register y crea una cuenta gratuita.
-2. Al crear tu primer proyecto, elige el plan **M0 Free** (512 MB, gratis para siempre).
+2. Al crear tu primer proyecto, elige el plan **M0 Free** (512 MB, gratis para siempre). 
 3. Elige un proveedor y región (cualquiera cercana a ti está bien).
 4. En **Security Quickstart**:
    - Crea un usuario de base de datos (usuario + contraseña) — **guarda la contraseña**.
