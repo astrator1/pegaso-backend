@@ -11,7 +11,7 @@ definidas en Base44 (`src/entities.ts`).
 2. Al crear tu primer proyecto, elige el plan **M0 Free** (512 MB, gratis para siempre). 
 3. Elige un proveedor y región (cualquiera cercana a ti está bien).
 4. En **Security Quickstart**:
-   - Crea un usuario de base de datos (usuario + contraseña) — **guarda la contraseña**.
+   - Crea un usuario de base de datos (usuario + contraseña) — **guarda la contraseña**. 
    - En "Where would you like to connect from", añade `0.0.0.0/0` (permitir desde cualquier IP).
      Esto es necesario porque Deno Deploy no tiene IPs fijas. Es seguro porque el acceso sigue
      requiriendo usuario y contraseña.
