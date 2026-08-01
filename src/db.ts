@@ -1,4 +1,4 @@
-import { MongoClient } from "mongo/mod.ts";
+import { MongoClient } from "npm:mongodb@6";
 
 let client: MongoClient | null = null;
 
@@ -8,9 +8,9 @@ export async function getDb() {
     if (!uri) {
       throw new Error("Falta la variable de entorno MONGODB_URI");
     }
-    client = new MongoClient();
-    await client.connect(uri);
+    client = new MongoClient(uri);
+    await client.connect();
   }
   const dbName = Deno.env.get("MONGODB_DB") || "flota_drones";
-  return client.database(dbName);
+  return client.db(dbName);
 }
