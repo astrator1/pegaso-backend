@@ -27,7 +27,7 @@ export async function handleRegister(req: Request): Promise<Response> {
   const userCount = await users.countDocuments({});
   const passwordHash = await hashPassword(password);
   const now = new Date().toISOString();
-  const insertId = await users.insertOne({
+  const { insertedId } = await users.insertOne({
     email: email.toLowerCase(),
     password_hash: passwordHash,
     full_name: full_name || null,
@@ -36,7 +36,7 @@ export async function handleRegister(req: Request): Promise<Response> {
     created_date: now,
   });
 
-  const user = await users.findOne({ _id: insertId });
+  const user = await users.findOne({ _id: insertedId });
   const token = await signJWT({ sub: user!._id.toString() }, JWT_SECRET());
   return json({ access_token: token, user: userToPublic(user) }, 201);
 }
@@ -132,7 +132,7 @@ export async function getUserFromRequest(req: Request): Promise<any | null> {
 
   const db = await getDb();
   const users = db.collection("User");
-  const { ObjectId } = await import("mongo/mod.ts");
+  const { ObjectId } = await import("npm:mongodb@6");
   try {
     const user = await users.findOne({ _id: new ObjectId(payload.sub as string) });
     return user;
