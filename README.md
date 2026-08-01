@@ -4,7 +4,7 @@ Backend serverless en Deno que reemplaza a Base44: autenticación por email/cont
 y CRUD para las 9 entidades de la app (Aeronave, Bateria, BateriaMantenimiento, Mantenimiento,
 Material, Modificaciones, Piloto, Vuelo, User), con las mismas reglas de acceso que tenía
 definidas en Base44 (`src/entities.ts`).
-
+ 
 ## 1. Crear la base de datos en MongoDB Atlas (gratis)
 
 1. Ve a https://www.mongodb.com/cloud/atlas/register y crea una cuenta gratuita.
