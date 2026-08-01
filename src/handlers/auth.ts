@@ -11,7 +11,7 @@ function json(body: unknown, status = 200) {
 }
 
 function userToPublic(u: any) {
-  return { id: u._id.toString(), email: u.email, role: u.role, full_name: u.full_name || null };
+  return { id: u._id.toString(), email: u.email, role: u.role, full_name: u.full_name || null, approved: !!u.approved };
 }
 
 export async function handleRegister(req: Request): Promise<Response> {
@@ -25,16 +25,24 @@ export async function handleRegister(req: Request): Promise<Response> {
   if (existing) return json({ message: "Ya existe una cuenta con ese email" }, 409);
 
   const userCount = await users.countDocuments({});
+  const isFirstUser = userCount === 0;
   const passwordHash = await hashPassword(password);
   const now = new Date().toISOString();
   const { insertedId } = await users.insertOne({
     email: email.toLowerCase(),
     password_hash: passwordHash,
     full_name: full_name || null,
-    // El primer usuario que se registra se convierte en admin automáticamente.
-    role: userCount === 0 ? "admin" : "user",
+    // El primer usuario que se registra se convierte en admin automáticamente y queda aprobado.
+    // Los siguientes se registran como "user" y quedan pendientes de aprobación por un admin.
+    role: isFirstUser ? "admin" : "user",
+    approved: isFirstUser,
     created_date: now,
   });
+
+  if (!isFirstUser) {
+    // No damos token de sesión hasta que un admin apruebe la cuenta.
+    return json({ pending: true, message: "Cuenta creada. Un administrador debe aprobarla antes de que puedas entrar." }, 201);
+  }
 
   const user = await users.findOne({ _id: insertedId });
   const token = await signJWT({ sub: user!._id.toString() }, JWT_SECRET());
@@ -52,6 +60,10 @@ export async function handleLogin(req: Request): Promise<Response> {
 
   const valid = await verifyPassword(password, user.password_hash);
   if (!valid) return json({ message: "Credenciales inválidas" }, 401);
+
+  if (!user.approved) {
+    return json({ pending: true, message: "Tu cuenta todavía no ha sido aprobada por un administrador." }, 403);
+  }
 
   const token = await signJWT({ sub: user._id.toString() }, JWT_SECRET());
   return json({ access_token: token, user: userToPublic(user) });
@@ -140,3 +152,4 @@ export async function getUserFromRequest(req: Request): Promise<any | null> {
     return null;
   }
 }
+
