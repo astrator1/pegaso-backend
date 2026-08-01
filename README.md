@@ -5,7 +5,7 @@ y CRUD para las 9 entidades de la app (Aeronave, Bateria, BateriaMantenimiento, 
 Material, Modificaciones, Piloto, Vuelo, User), con las mismas reglas de acceso que tenía
 definidas en Base44 (`src/entities.ts`).
  
-## 1. Crear la base de datos en MongoDB Atlas (gratis)
+## 1. Crear la base de datos en MongoDB Atlas (gratis) 
 
 1. Ve a https://www.mongodb.com/cloud/atlas/register y crea una cuenta gratuita.
 2. Al crear tu primer proyecto, elige el plan **M0 Free** (512 MB, gratis para siempre).
