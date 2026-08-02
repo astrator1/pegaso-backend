@@ -75,6 +75,23 @@ export async function handleMe(req: Request): Promise<Response> {
   return json(userToPublic(user));
 }
 
+export async function handleChangePassword(req: Request): Promise<Response> {
+  const user = await getUserFromRequest(req);
+  if (!user) return json({ message: "No autenticado" }, 401);
+
+  const { currentPassword, newPassword } = await req.json().catch(() => ({}));
+  if (!currentPassword || !newPassword) return json({ message: "Faltan datos" }, 400);
+  if (newPassword.length < 8) return json({ message: "La contraseña nueva debe tener al menos 8 caracteres" }, 400);
+
+  const valid = await verifyPassword(currentPassword, user.password_hash);
+  if (!valid) return json({ message: "La contraseña actual no es correcta" }, 401);
+
+  const db = await getDb();
+  const passwordHash = await hashPassword(newPassword);
+  await db.collection("User").updateOne({ _id: user._id }, { $set: { password_hash: passwordHash } });
+  return json({ message: "Contraseña actualizada" });
+}
+
 export async function handleForgotPassword(req: Request): Promise<Response> {
   const { email } = await req.json().catch(() => ({}));
   if (email) {
@@ -152,4 +169,3 @@ export async function getUserFromRequest(req: Request): Promise<any | null> {
     return null;
   }
 }
-
