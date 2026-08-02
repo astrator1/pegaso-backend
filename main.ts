@@ -1,4 +1,4 @@
-import { handleRegister, handleLogin, handleMe, handleForgotPassword, handleResetPassword } from "./src/handlers/auth.ts";
+import { handleRegister, handleLogin, handleMe, handleChangePassword, handleForgotPassword, handleResetPassword } from "./src/handlers/auth.ts";
 import { handleEntities } from "./src/handlers/entities.ts";
 import { handleListAllUsers, handleApproveUser, handleDeleteUser, handleResetUserPassword } from "./src/handlers/admin.ts";
 
@@ -33,6 +33,7 @@ async function router(req: Request): Promise<Response> {
   if (path === "/api/auth/register" && req.method === "POST") return handleRegister(req);
   if (path === "/api/auth/login" && req.method === "POST") return handleLogin(req);
   if (path === "/api/auth/me" && req.method === "GET") return handleMe(req);
+  if (path === "/api/auth/change-password" && req.method === "POST") return handleChangePassword(req);
   if (path === "/api/auth/forgot-password" && req.method === "POST") return handleForgotPassword(req);
   if (path === "/api/auth/reset-password" && req.method === "POST") return handleResetPassword(req);
 
