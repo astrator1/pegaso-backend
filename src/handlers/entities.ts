@@ -78,6 +78,9 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
 
     // ---- CREATE: POST /api/entities/:name ----
     if (req.method === "POST" && !action) {
+      if (ENTITIES[entityName].createRule === "admin" && !isAdmin) {
+        return json({ message: "Requiere rol admin" }, 403);
+      }
       const body = await req.json().catch(() => ({}));
       const now = new Date().toISOString();
       const toInsert = {
@@ -95,6 +98,9 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
 
     // ---- BULK CREATE: POST /api/entities/:name/bulk-create ----
     if (req.method === "POST" && action === "bulk-create") {
+      if (ENTITIES[entityName].createRule === "admin" && !isAdmin) {
+        return json({ message: "Requiere rol admin" }, 403);
+      }
       const items: any[] = await req.json().catch(() => []);
       const now = new Date().toISOString();
       const toInsert = items.map((item) => {
