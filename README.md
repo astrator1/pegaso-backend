@@ -1,5 +1,5 @@
 # Backend – Gestión de Flota (Deno + MongoDB)
-
+ 
 Backend serverless en Deno que reemplaza a Base44: autenticación por email/contraseña (JWT)
 y CRUD para las 9 entidades de la app (Aeronave, Bateria, BateriaMantenimiento, Mantenimiento,
 Material, Modificaciones, Piloto, Vuelo, User), con las mismas reglas de acceso que tenía
