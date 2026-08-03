@@ -116,8 +116,11 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
 
     function canWrite(doc: any): boolean {
       const rule = ENTITIES[entityName].writeRule;
-      if (rule === "admin") return isAdmin;
-      return isAdmin || doc?.created_by_id === user._id.toString();
+      if (isAdmin) return true;
+      if (rule === "admin") return false;
+      const isOwner = doc?.created_by_id === user._id.toString();
+      if (rule === "owner_while_pending") return isOwner && doc?.estado === "pendiente";
+      return isOwner; // "owner_or_admin"
     }
 
     // ---- UPDATE: PUT /api/entities/:name/:id ----
