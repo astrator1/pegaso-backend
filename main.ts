@@ -1,6 +1,7 @@
 import { handleRegister, handleLogin, handleMe, handleChangePassword, handleForgotPassword, handleResetPassword } from "./src/handlers/auth.ts";
 import { handleEntities } from "./src/handlers/entities.ts";
 import { handleListAllUsers, handleApproveUser, handleDeleteUser, handleResetUserPassword, handleSetUserRole } from "./src/handlers/admin.ts";
+import { handleDecidirPlanVuelo } from "./src/handlers/planvuelo.ts";
 
 function corsHeaders() {
   const origin = Deno.env.get("APP_URL") || "*";
@@ -46,6 +47,9 @@ async function router(req: Request): Promise<Response> {
   if (roleMatch && req.method === "POST") return handleSetUserRole(req, roleMatch[1]);
   const userIdMatch = path.match(/^\/api\/admin\/users\/([^/]+)$/);
   if (userIdMatch && req.method === "DELETE") return handleDeleteUser(req, userIdMatch[1]);
+
+  const decidirMatch = path.match(/^\/api\/planes-vuelo\/([^/]+)\/decidir$/);
+  if (decidirMatch && req.method === "POST") return handleDecidirPlanVuelo(req, decidirMatch[1]);
 
   const entityMatch = path.match(/^\/api\/entities\/([^/]+)(?:\/(.*))?$/);
   if (entityMatch) {
