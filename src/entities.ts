@@ -14,7 +14,7 @@
 
 export type ReadRule = "owner" | "owner_or_admin" | "any";
 export type CreateRule = "any" | "admin";
-export type WriteRule = "admin" | "owner_or_admin";
+export type WriteRule = "admin" | "owner_or_admin" | "owner_while_pending";
 
 export interface EntityConfig {
   name: string;
@@ -34,6 +34,9 @@ export const ENTITIES: Record<string, EntityConfig> = {
   Mision: { name: "Mision", readRule: "any", createRule: "admin", writeRule: "admin" },
   // Un piloto ve, crea, edita y borra sus propios registros de vuelo (y nada más que los suyos)
   Vuelo: { name: "Vuelo", readRule: "owner", createRule: "any", writeRule: "owner_or_admin" },
+  // Plan de Vuelo Operacional: un piloto crea y ve solo los suyos (admin ve todos), y solo puede
+  // seguir editándolo mientras esté "pendiente" — una vez aprobado/rechazado queda fijo.
+  PlanVuelo: { name: "PlanVuelo", readRule: "owner", createRule: "any", writeRule: "owner_while_pending" },
   // El resto de la gestión de flota queda fuera del alcance de un piloto normal
   BateriaMantenimiento: { name: "BateriaMantenimiento", readRule: "owner", createRule: "admin", writeRule: "admin" },
   Mantenimiento: { name: "Mantenimiento", readRule: "owner", createRule: "admin", writeRule: "admin" },
