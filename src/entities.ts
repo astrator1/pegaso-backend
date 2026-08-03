@@ -30,6 +30,8 @@ export const ENTITIES: Record<string, EntityConfig> = {
   Aeronave: { name: "Aeronave", readRule: "any", createRule: "admin", writeRule: "admin" },
   Bateria: { name: "Bateria", readRule: "any", createRule: "admin", writeRule: "admin" },
   Piloto: { name: "Piloto", readRule: "any", createRule: "admin", writeRule: "admin" },
+  // Catálogo de misiones predefinidas, para elegir en el formulario de vuelo
+  Mision: { name: "Mision", readRule: "any", createRule: "admin", writeRule: "admin" },
   // Un piloto ve, crea, edita y borra sus propios registros de vuelo (y nada más que los suyos)
   Vuelo: { name: "Vuelo", readRule: "owner", createRule: "any", writeRule: "owner_or_admin" },
   // El resto de la gestión de flota queda fuera del alcance de un piloto normal
