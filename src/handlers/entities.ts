@@ -92,6 +92,11 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
         updated_date: now,
       };
       delete toInsert.id;
+      // Los vuelos registrados por un piloto quedan pendientes de validación; los que crea
+      // directamente un admin/superadmin se dan por validados sin más trámite.
+      if (entityName === "Vuelo" && !toInsert.estado) {
+        toInsert.estado = isAdmin ? "validado" : "pendiente";
+      }
       const { insertedId } = await collection.insertOne(toInsert);
       const doc = await collection.findOne({ _id: insertedId });
       return json(docToJson(doc), 201);
@@ -107,7 +112,11 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
       const toInsert = items.map((item) => {
         const clean = { ...item };
         delete clean.id;
-        return { ...clean, created_by_id: user._id.toString(), created_by_email: user.email, created_date: now, updated_date: now };
+        const extra: Record<string, unknown> = {};
+        if (entityName === "Vuelo" && !clean.estado) {
+          extra.estado = isAdmin ? "validado" : "pendiente";
+        }
+        return { ...clean, ...extra, created_by_id: user._id.toString(), created_by_email: user.email, created_date: now, updated_date: now };
       });
       if (toInsert.length === 0) return json([]);
       await collection.insertMany(toInsert);
