@@ -32,8 +32,9 @@ export const ENTITIES: Record<string, EntityConfig> = {
   Piloto: { name: "Piloto", readRule: "any", createRule: "admin", writeRule: "admin" },
   // Catálogo de misiones predefinidas, para elegir en el formulario de vuelo
   Mision: { name: "Mision", readRule: "any", createRule: "admin", writeRule: "admin" },
-  // Un piloto ve, crea, edita y borra sus propios registros de vuelo (y nada más que los suyos)
-  Vuelo: { name: "Vuelo", readRule: "owner", createRule: "any", writeRule: "owner_or_admin" },
+  // Un piloto ve y crea sus propios registros de vuelo, y solo puede seguir editándolo/borrarlo
+  // mientras esté "pendiente" de validación — una vez validado/rechazado por un admin, queda fijo.
+  Vuelo: { name: "Vuelo", readRule: "owner", createRule: "any", writeRule: "owner_while_pending" },
   // Plan de Vuelo Operacional: un piloto crea y ve solo los suyos (admin ve todos), y solo puede
   // seguir editándolo mientras esté "pendiente" — una vez aprobado/rechazado queda fijo.
   PlanVuelo: { name: "PlanVuelo", readRule: "owner", createRule: "any", writeRule: "owner_while_pending" },
