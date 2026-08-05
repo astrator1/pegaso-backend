@@ -88,6 +88,7 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
         ...body,
         created_by_id: user._id.toString(),
         created_by_email: user.email,
+        created_by_name: user.full_name || user.email,
         created_date: now,
         updated_date: now,
       };
@@ -116,7 +117,7 @@ export async function handleEntities(req: Request, url: URL, entityName: string,
         if (entityName === "Vuelo" && !clean.estado) {
           extra.estado = isAdmin ? "validado" : "pendiente";
         }
-        return { ...clean, ...extra, created_by_id: user._id.toString(), created_by_email: user.email, created_date: now, updated_date: now };
+        return { ...clean, ...extra, created_by_id: user._id.toString(), created_by_email: user.email, created_by_name: user.full_name || user.email, created_date: now, updated_date: now };
       });
       if (toInsert.length === 0) return json([]);
       await collection.insertMany(toInsert);
