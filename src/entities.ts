@@ -43,6 +43,9 @@ export const ENTITIES: Record<string, EntityConfig> = {
   Mantenimiento: { name: "Mantenimiento", readRule: "owner", createRule: "admin", writeRule: "admin" },
   Material: { name: "Material", readRule: "owner", createRule: "admin", writeRule: "admin" },
   Modificaciones: { name: "Modificaciones", readRule: "owner", createRule: "admin", writeRule: "admin" },
+  // Avisos de mantenimiento vencido descartados por el superusuario (ver src/handlers/incidencias.ts,
+  // que es quien realmente controla el permiso de escribir aquí — esto es solo un respaldo).
+  IncidenciaDescartada: { name: "IncidenciaDescartada", readRule: "any", createRule: "admin", writeRule: "admin" },
 };
 
 export function isValidEntity(name: string): boolean {
