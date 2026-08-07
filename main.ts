@@ -2,6 +2,7 @@ import { handleRegister, handleLogin, handleMe, handleChangePassword, handleForg
 import { handleEntities } from "./src/handlers/entities.ts";
 import { handleListAllUsers, handleApproveUser, handleDeleteUser, handleResetUserPassword, handleSetUserRole } from "./src/handlers/admin.ts";
 import { handleDecidirPlanVuelo, handleDecidirVuelo } from "./src/handlers/planvuelo.ts";
+import { handleDescartarIncidencia, handleDescartarTodasIncidencias } from "./src/handlers/incidencias.ts";
 
 function corsHeaders() {
   const origin = Deno.env.get("APP_URL") || "*";
@@ -52,6 +53,8 @@ async function router(req: Request): Promise<Response> {
   if (decidirMatch && req.method === "POST") return handleDecidirPlanVuelo(req, decidirMatch[1]);
   const decidirVueloMatch = path.match(/^\/api\/vuelos\/([^/]+)\/decidir$/);
   if (decidirVueloMatch && req.method === "POST") return handleDecidirVuelo(req, decidirVueloMatch[1]);
+  if (path === "/api/incidencias/descartar" && req.method === "POST") return handleDescartarIncidencia(req);
+  if (path === "/api/incidencias/descartar-todas" && req.method === "POST") return handleDescartarTodasIncidencias(req);
 
   const entityMatch = path.match(/^\/api\/entities\/([^/]+)(?:\/(.*))?$/);
   if (entityMatch) {
