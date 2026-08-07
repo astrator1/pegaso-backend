@@ -58,9 +58,9 @@ export async function handleApproveUser(req: Request, id: string): Promise<Respo
   return json(userSummary(user));
 }
 
-// POST /api/admin/users/:id/reset-password  { newPassword }
+// POST /api/admin/users/:id/reset-password  { newPassword }  (solo el superusuario)
 export async function handleResetUserPassword(req: Request, id: string): Promise<Response> {
-  const { error } = await requireAdmin(req);
+  const { error } = await requireSuperadmin(req);
   if (error) return error;
 
   const { newPassword } = await req.json().catch(() => ({}));
@@ -106,9 +106,9 @@ export async function handleSetUserRole(req: Request, id: string): Promise<Respo
   return json(userSummary(user));
 }
 
-// DELETE /api/admin/users/:id  (rechaza / elimina una cuenta, pendiente o no)
+// DELETE /api/admin/users/:id  (rechaza / elimina una cuenta, pendiente o no — solo el superusuario)
 export async function handleDeleteUser(req: Request, id: string): Promise<Response> {
-  const { error, user: admin } = await requireAdmin(req);
+  const { error, user: admin } = await requireSuperadmin(req);
   if (error) return error;
   if (admin!._id.toString() === id) {
     return json({ message: "No puedes eliminar tu propia cuenta" }, 400);
